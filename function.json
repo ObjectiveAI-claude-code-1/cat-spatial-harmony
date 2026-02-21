@@ -1,0 +1,167 @@
+{
+  "type": "scalar.function",
+  "input_schema": {
+    "type": "object",
+    "description": "A photograph containing a cat to evaluate for spatial harmony between the cat and its environment.",
+    "properties": {
+      "photograph": {
+        "type": "image",
+        "description": "A photograph containing a cat. The photograph is the totality of the evidence — the function evaluates the relationship between the cat and the space around it based solely on what is visible in this image. The photograph may depict any breed of cat in any environment, indoors or outdoors, with the cat positioned anywhere within the frame. The environment may be sparse or rich, orderly or chaotic, natural or artificial."
+      }
+    },
+    "required": [
+      "photograph"
+    ]
+  },
+  "tasks": [
+    {
+      "type": "vector.completion",
+      "messages": [
+        {
+          "role": "system",
+          "content": [
+            {
+              "type": "text",
+              "text": "You are an experienced photography mentor specializing in composition. You pay close attention to how negative space — the empty areas not occupied by the subject — functions within the frame. Negative space can cradle a subject, giving it room to breathe and staging it with intentionality, or it can neglect the subject, abandoning it in a meaningless void or crowding it against the edges of the frame."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "I took this photograph of a cat. Does the empty space around the cat feel intentional and purposeful, or does it feel accidental?"
+            },
+            {
+              "$jmespath": "input.photograph"
+            }
+          ]
+        }
+      ],
+      "responses": [
+        [
+          {
+            "type": "text",
+            "text": "The negative space here is working beautifully. It feels completely intentional — the empty areas frame and cradle the cat, giving it room to breathe while keeping it as the clear focal point. This space feels like a deliberate compositional choice that stages the cat with calm and purpose, the way silence in music gives the notes around it more meaning."
+          }
+        ],
+        [
+          {
+            "type": "text",
+            "text": "The negative space is adequate but unremarkable. Some of the empty areas feel somewhat intentional, but others feel like they happened by chance rather than by design. The cat has room, but the space doesn't actively enhance the subject the way truly purposeful negative space would. It neither cradles nor abandons the cat — it simply exists around it."
+          }
+        ],
+        [
+          {
+            "type": "text",
+            "text": "The negative space is not serving the cat well here. The empty areas feel accidental — either the cat is lost in a vast void that makes it feel small and forgotten, or it's pressed against the edges of the frame with no breathing room. The space feels neglectful rather than purposeful, as though the photograph forgot to make room for its own subject."
+          }
+        ]
+      ],
+      "output": {
+        "$starlark": "output[\"scores\"][0] * 1.0 + output[\"scores\"][1] * 0.5 + output[\"scores\"][2] * 0.0"
+      }
+    },
+    {
+      "type": "vector.completion",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "I'm curating a collection of cat portraits where the environment complements the subject. For each submission, I need to know whether the background elements — the objects, textures, colors, and shapes behind and around the cat — feel like they belong to the same visual story as the cat, or whether they compete with the subject for the viewer's attention. Here is the photograph:"
+            },
+            {
+              "$jmespath": "input.photograph"
+            },
+            {
+              "type": "text",
+              "text": "Does this background collaborate with the cat or compete against it?"
+            }
+          ]
+        }
+      ],
+      "responses": [
+        [
+          {
+            "type": "text",
+            "text": "The background is perfectly cohesive. Every element feels like it belongs to the same world as the cat — the textures, colors, and objects work together as a unified supporting cast that guides the eye naturally back to the subject. Whether the background is simple or richly detailed, it collaborates with the cat completely. This is a portrait where the environment remembers whose portrait it is."
+          }
+        ],
+        [
+          {
+            "type": "text",
+            "text": "The background mostly works with the cat. Most elements feel like they belong to the same visual story, though one or two details mildly pull the eye away from the subject. Overall the environment collaborates with the cat more than it competes, but it falls short of true cohesion."
+          }
+        ],
+        [
+          {
+            "type": "text",
+            "text": "The background is somewhat at odds with the cat. Several elements pull attention away from the subject — competing shapes, clashing colors, or textures that flatten the cat into the scenery. The eye wanders rather than returning to the subject. The environment feels like it's telling a different story than the cat."
+          }
+        ],
+        [
+          {
+            "type": "text",
+            "text": "The background actively undermines the cat. It is cluttered, chaotic, or visually aggressive in a way that overwhelms the subject entirely. The cat has to fight for attention against dominant shapes, garish colors, or busy textures that turn this photograph into a visual search puzzle rather than a portrait. The background has forgotten whose portrait this is."
+          }
+        ]
+      ],
+      "output": {
+        "$starlark": "output[\"scores\"][0] * 1.0 + output[\"scores\"][1] * 0.667 + output[\"scores\"][2] * 0.333 + output[\"scores\"][3] * 0.0"
+      }
+    },
+    {
+      "type": "vector.completion",
+      "messages": [
+        {
+          "role": "developer",
+          "content": [
+            {
+              "type": "text",
+              "text": "You are evaluating cat photographs for a gallery exhibition. Your role is to assess whether the cat commands its space with appropriate stature and dignity — neither cramped nor dwarfed, but anchored in the frame as the clear protagonist. A cat with strong proportional presence feels grounded in its environment and occupies the frame with visual weight, regardless of whether it is large or small in the image."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "$jmespath": "input.photograph"
+            },
+            {
+              "type": "text",
+              "text": "How would you describe the cat's presence and stature within this frame? Does it feel like the protagonist of its own photograph?"
+            }
+          ]
+        }
+      ],
+      "responses": [
+        [
+          {
+            "type": "text",
+            "text": "The cat commands this frame with perfect poise. It feels like the undeniable protagonist — anchored in the composition, grounded in its environment, and given exactly the right amount of room to exist with dignity. The environment defers to the cat without cramping or dwarfing it. The cat is the reason this photograph exists, and the composition makes that unmistakably clear."
+          }
+        ],
+        [
+          {
+            "type": "text",
+            "text": "The cat has a reasonable presence but the balance is not quite right. It is either given slightly too much room, causing it to lose some visual weight within the frame, or framed a touch too tightly, creating a faint sense of confinement. The cat is clearly the subject, but it does not fully command the space with the stature and dignity of a true protagonist."
+          }
+        ],
+        [
+          {
+            "type": "text",
+            "text": "The cat struggles to feel like the protagonist here. It is either so small within the frame that it becomes a minor detail lost in surroundings that dwarf it, or cropped so tightly that it feels constricted and claustrophobic with no room to breathe. The environment has overtaken the portrait — the cat does not command this space and feels more like an afterthought than the reason the photograph was taken."
+          }
+        ]
+      ],
+      "output": {
+        "$starlark": "output[\"scores\"][0] * 1.0 + output[\"scores\"][1] * 0.5 + output[\"scores\"][2] * 0.0"
+      }
+    }
+  ],
+  "description": "Scores how well the space around a cat in a photograph serves the subject, evaluating three qualities: whether negative space feels purposeful rather than neglectful, whether background elements belong to the same visual story as the cat, and whether the cat commands its frame with appropriate stature as the clear protagonist."
+}
